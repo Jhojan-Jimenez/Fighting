@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #ffffff;
+  color: #111111;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Gymshark custom radio */
+.gymshark-radio {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid #111111;
+  border-radius: 50%;
+  outline: none;
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.gymshark-radio::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  background-color: #111111;
+}
+
+.gymshark-radio:checked::before {
+  transform: scale(1);
+}
+
+/* Gymshark custom checkbox */
+.gymshark-checkbox {
+  appearance: none;
+  width: 17px;
+  height: 17px;
+  border: 1.5px solid #111111;
+  border-radius: 2px;
+  outline: none;
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.gymshark-checkbox::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  background-color: #111111;
+}
+
+.gymshark-checkbox:checked::before {
+  transform: scale(1);
+}
+
+/* Custom sleek scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #c5c5c5;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #888888;
+}
