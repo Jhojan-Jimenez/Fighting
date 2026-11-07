@@ -44,14 +44,15 @@ tnt-catalog/
 │   └── vite.svg
 ├── src/
 │   ├── components/               # Componentes modulares desacoplados
-│   │   ├── Navbar.tsx            # Barra superior fija con filtros rápidos y contacto
+│   │   ├── Navbar.tsx            # Barra superior fija con filtros rápidos, wishlist y contacto
 │   │   ├── CollectionBanner.tsx  # Hero minimalista con badges técnicos
 │   │   ├── FilterSidebar.tsx     # Filtro lateral desktop + drawer móvil (Género, Elemento, Talla)
 │   │   ├── ProductCard.tsx       # Tarjeta 3:2 con selector de colorway y tallas
-│   │   └── ProductModal.tsx      # Modal inmersivo con cambio de colorway, tallas y tabla de medidas
+│   │   ├── ProductModal.tsx      # Modal inmersivo con cambio de colorway, tallas y tabla de medidas
+│   │   └── WishlistView.tsx      # Página dedicada de favoritos, cotización grupal WhatsApp y empty state
 │   ├── data/
 │   │   └── mockups.ts            # Fuente de verdad de los 38 mockups y agrupador por producto
-│   ├── App.tsx                   # Ensamblador principal de estado y layout responsivo
+│   ├── App.tsx                   # Ensamblador principal de estado, routing SPA (#wishlist) y layout
 │   ├── index.css                 # Directivas Tailwind y estilos de controles interactivos
 │   └── main.tsx                  # Punto de entrada React
 ├── AGENTS.md                     # Este archivo de memoria técnica
@@ -123,6 +124,13 @@ Las prendas son atléticas de compresión (Rashguards BJJ / MMA). Las tallas sop
   - Botón "¿Cuál es mi talla?" que despliega un modal con la tabla de medidas anatómicas en centímetros y pesos sugeridos.
   - Botón de conversión a WhatsApp con el mensaje prearmado:
     `"¡Hola! Me interesa la Rashguard [ELEMENTO] ([GÉNERO]) en colorway [CÓDIGO - NOMBRE] en talla [TALLA]. ¿Tienen disponibilidad?"`
+
+### 6. `WishlistView.tsx` (Página de Favoritos / Lista de Deseos)
+* **Acceso y Routing:** Accesible al pulsar el icono de corazón en el `Navbar` o navegando a `/#wishlist`. Soporta historial del navegador (`window.location.hash`).
+* **Persistencia:** Almacenamiento local en `localStorage` (`tnt_catalog_wishlist`).
+* **Empty State:** Cuando no hay artículos, presenta una ilustración minimalista, mensaje motivacional y botón para explorar la colección o navegar directamente a cada uno de los 5 elementos.
+* **Grilla de Favoritos:** Renderiza las prendas guardadas con sus selectores de variantes, tallas y botón de modal.
+* **Cotización Grupal en WhatsApp:** Botón que compila todos los productos guardados con sus nombres, géneros y combinaciones en una lista con viñetas lista para enviar por chat.
 
 ---
 
