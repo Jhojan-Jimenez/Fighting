@@ -1,10 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import { MOCKUP_ITEMS, MockupItem } from './data/mockups';
-import { GymsharkHeader } from './components/GymsharkHeader';
-import { GymsharkBanner } from './components/GymsharkBanner';
-import { GymsharkSidebar } from './components/GymsharkSidebar';
-import { GymsharkCard, ElementProduct, getElementIcon, getElementTheme } from './components/GymsharkCard';
-import { GymsharkModal } from './components/GymsharkModal';
+import { Navbar } from './components/Navbar';
+import { CollectionBanner } from './components/CollectionBanner';
+import { FilterSidebar } from './components/FilterSidebar';
+import { ProductCard, ElementProduct, getElementIcon, getElementTheme } from './components/ProductCard';
+import { ProductModal } from './components/ProductModal';
 import { Grid3X3, Grid2X2, SlidersHorizontal, X, RotateCcw } from 'lucide-react';
 
 export const App: React.FC = () => {
@@ -12,6 +12,7 @@ export const App: React.FC = () => {
   const [gender, setGender] = useState<string>('ALL');
   const [selectedElement, setSelectedElement] = useState<string>('ALL');
   const [selectedColorway, setSelectedColorway] = useState<string>('ALL');
+  const [selectedSize, setSelectedSize] = useState<string>('ALL');
   const [selectedFit, setSelectedFit] = useState<string>('ALL');
   const [sortBy, setSortBy] = useState<string>('relevancy');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -70,6 +71,7 @@ export const App: React.FC = () => {
     setGender('ALL');
     setSelectedElement('ALL');
     setSelectedColorway('ALL');
+    setSelectedSize('ALL');
     setSelectedFit('ALL');
     setSortBy('relevancy');
     setSearchQuery('');
@@ -79,6 +81,7 @@ export const App: React.FC = () => {
     gender !== 'ALL' ||
     selectedElement !== 'ALL' ||
     selectedColorway !== 'ALL' ||
+    selectedSize !== 'ALL' ||
     selectedFit !== 'ALL' ||
     sortBy !== 'relevancy' ||
     searchQuery.trim() !== '';
@@ -132,7 +135,7 @@ export const App: React.FC = () => {
     }
 
     return result;
-  }, [elementProducts, gender, selectedElement, selectedColorway, selectedFit, sortBy, searchQuery]);
+  }, [elementProducts, gender, selectedElement, selectedColorway, selectedSize, selectedFit, sortBy, searchQuery]);
 
   // Modal navigation across all 38 mockups
   const currentIndex = activeModalItem
@@ -169,8 +172,8 @@ export const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white text-black font-sans selection:bg-black selection:text-white flex flex-col">
-      {/* 1. Header */}
-      <GymsharkHeader
+      {/* 1. Header Navigation */}
+      <Navbar
         gender={gender}
         onGenderChange={setGender}
         selectedElement={selectedElement}
@@ -186,8 +189,8 @@ export const App: React.FC = () => {
         }}
       />
 
-      {/* 2. Full-width Black Title Banner */}
-      <GymsharkBanner
+      {/* 2. Full-width Title Banner */}
+      <CollectionBanner
         gender={gender}
         selectedElement={selectedElement}
         selectedModel={selectedColorway}
@@ -230,7 +233,7 @@ export const App: React.FC = () => {
             className="flex items-center gap-2 px-3.5 py-2 bg-black text-white rounded-lg text-xs font-bold uppercase tracking-wider shadow-sm"
           >
             <SlidersHorizontal className="w-3.5 h-3.5" />
-            <span>Filtros & Ordenar</span>
+            <span>Filtros & Orden</span>
             {hasActiveFilters && (
               <span className="w-2 h-2 rounded-full bg-rose-400" />
             )}
@@ -243,13 +246,15 @@ export const App: React.FC = () => {
         <div className="flex gap-10 items-start">
           {/* Desktop Left Sidebar */}
           <div className="hidden lg:block shrink-0">
-            <GymsharkSidebar
+            <FilterSidebar
               gender={gender}
               onGenderChange={setGender}
               selectedElement={selectedElement}
               onElementChange={setSelectedElement}
               selectedColorway={selectedColorway}
               onColorwayChange={setSelectedColorway}
+              selectedSize={selectedSize}
+              onSizeChange={setSelectedSize}
               sortBy={sortBy}
               onSortByChange={setSortBy}
               selectedFit={selectedFit}
@@ -269,7 +274,7 @@ export const App: React.FC = () => {
                   <div className="flex items-center gap-2">
                     <SlidersHorizontal className="w-4 h-4 text-black" />
                     <span className="font-montserrat font-bold text-sm uppercase tracking-wider">
-                      Filtros & Ordenar
+                      Filtros & Orden
                     </span>
                   </div>
                   <button
@@ -282,13 +287,15 @@ export const App: React.FC = () => {
 
                 {/* Drawer Body */}
                 <div className="px-5 py-3 overflow-y-auto flex-1">
-                  <GymsharkSidebar
+                  <FilterSidebar
                     gender={gender}
                     onGenderChange={setGender}
                     selectedElement={selectedElement}
                     onElementChange={setSelectedElement}
                     selectedColorway={selectedColorway}
                     onColorwayChange={setSelectedColorway}
+                    selectedSize={selectedSize}
+                    onSizeChange={setSelectedSize}
                     sortBy={sortBy}
                     onSortByChange={setSortBy}
                     selectedFit={selectedFit}
@@ -358,7 +365,7 @@ export const App: React.FC = () => {
             {filteredProducts.length > 0 ? (
               <div className={`grid gap-x-6 sm:gap-x-8 gap-y-8 sm:gap-y-12 ${getGridColsClass()}`}>
                 {filteredProducts.map((prod) => (
-                  <GymsharkCard
+                  <ProductCard
                     key={prod.id}
                     product={prod}
                     globalColorway={selectedColorway}
@@ -385,8 +392,8 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {/* 4. Lightbox Inspector Modal */}
-      <GymsharkModal
+      {/* 4. Detail Lightbox Modal */}
+      <ProductModal
         item={activeModalItem}
         availableColorways={
           activeModalItem

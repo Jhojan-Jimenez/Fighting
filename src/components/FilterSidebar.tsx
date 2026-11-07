@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { ChevronUp, ChevronDown } from 'lucide-react';
-import { getElementIcon, getElementTheme, getColorwaySwatch } from './GymsharkCard';
+import { getElementIcon, getElementTheme, getColorwaySwatch, AVAILABLE_SIZES } from './ProductCard';
 
-interface GymsharkSidebarProps {
+interface FilterSidebarProps {
   gender: string;
   onGenderChange: (g: string) => void;
   selectedElement: string;
   onElementChange: (e: string) => void;
   selectedColorway: string;
   onColorwayChange: (m: string) => void;
+  selectedSize: string;
+  onSizeChange: (s: string) => void;
   sortBy: string;
   onSortByChange: (s: string) => void;
   selectedFit: string;
@@ -27,13 +29,15 @@ interface GymsharkSidebarProps {
   };
 }
 
-export const GymsharkSidebar: React.FC<GymsharkSidebarProps> = ({
+export const FilterSidebar: React.FC<FilterSidebarProps> = ({
   gender,
   onGenderChange,
   selectedElement,
   onElementChange,
   selectedColorway,
   onColorwayChange,
+  selectedSize,
+  onSizeChange,
   sortBy,
   onSortByChange,
   selectedFit,
@@ -45,9 +49,10 @@ export const GymsharkSidebar: React.FC<GymsharkSidebarProps> = ({
   // Accordion open/close states
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
     element: true,
-    sort: true,
-    gender: true,
+    size: true,
     colorways: true,
+    gender: true,
+    sort: false,
     fit: false,
     activity: false,
   });
@@ -80,14 +85,14 @@ export const GymsharkSidebar: React.FC<GymsharkSidebarProps> = ({
       {/* Top Header */}
       <div className="flex items-center justify-between pb-4 border-b border-neutral-200">
         <h2 className="font-montserrat font-bold text-sm tracking-wider uppercase">
-          FILTER & SORT
+          FILTROS & ORDEN
         </h2>
         {hasActiveFilters && (
           <button
             onClick={onClearAll}
             className="text-xs font-semibold underline text-neutral-800 hover:text-black transition-all"
           >
-            Clear All
+            Limpiar Todo
           </button>
         )}
       </div>
@@ -138,46 +143,40 @@ export const GymsharkSidebar: React.FC<GymsharkSidebarProps> = ({
           )}
         </div>
 
-        {/* 2. GENDER / CATEGORY */}
+        {/* 2. TALLA DISPONIBLE (S, M, L, XL, 2XL) */}
         <div className="py-4">
           <button
-            onClick={() => toggleSection('gender')}
+            onClick={() => toggleSection('size')}
             className="w-full flex items-center justify-between font-bold text-xs tracking-wider uppercase mb-3 hover:text-neutral-600"
           >
-            <span>Gender / Fit</span>
-            {openSections.gender ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+            <span>Talla (Pro Fit)</span>
+            {openSections.size ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
 
-          {openSections.gender && (
-            <div className="space-y-3 pt-1">
-              <label className="flex items-center gap-3 cursor-pointer group">
-                <input
-                  type="checkbox"
-                  checked={gender === 'HOMBRE'}
-                  onChange={() => onGenderChange(gender === 'HOMBRE' ? 'ALL' : 'HOMBRE')}
-                  className="gymshark-checkbox"
-                />
-                <span className={`text-xs ${gender === 'HOMBRE' ? 'font-bold text-black' : 'text-neutral-700 font-medium'} group-hover:text-black`}>
-                  Hombre ({counts.hombre} diseños)
-                </span>
-              </label>
-
-              <label className="flex items-center gap-3 cursor-pointer group">
-                <input
-                  type="checkbox"
-                  checked={gender === 'MUJER'}
-                  onChange={() => onGenderChange(gender === 'MUJER' ? 'ALL' : 'MUJER')}
-                  className="gymshark-checkbox"
-                />
-                <span className={`text-xs ${gender === 'MUJER' ? 'font-bold text-black' : 'text-neutral-700 font-medium'} group-hover:text-black`}>
-                  Mujer ({counts.mujer} diseños)
-                </span>
-              </label>
+          {openSections.size && (
+            <div className="grid grid-cols-5 gap-1.5 pt-1">
+              {AVAILABLE_SIZES.map((size) => {
+                const isSelected = selectedSize === size;
+                return (
+                  <button
+                    key={size}
+                    type="button"
+                    onClick={() => onSizeChange(isSelected ? 'ALL' : size)}
+                    className={`py-2 text-xs font-bold rounded-lg border transition-all ${
+                      isSelected
+                        ? 'bg-black text-white border-black shadow-xs ring-1 ring-black'
+                        : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-700 border-neutral-200'
+                    }`}
+                  >
+                    {size}
+                  </button>
+                );
+              })}
             </div>
           )}
         </div>
 
-        {/* 3. COLORWAYS DISPONIBLES */}
+        {/* 3. COMBINACIÓN DE COLOR */}
         <div className="py-4">
           <button
             onClick={() => toggleSection('colorways')}
@@ -227,23 +226,62 @@ export const GymsharkSidebar: React.FC<GymsharkSidebarProps> = ({
           )}
         </div>
 
-        {/* 4. SORT BY */}
+        {/* 4. GÉNERO / CATEGORÍA */}
+        <div className="py-4">
+          <button
+            onClick={() => toggleSection('gender')}
+            className="w-full flex items-center justify-between font-bold text-xs tracking-wider uppercase mb-3 hover:text-neutral-600"
+          >
+            <span>Género</span>
+            {openSections.gender ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </button>
+
+          {openSections.gender && (
+            <div className="space-y-3 pt-1">
+              <label className="flex items-center gap-3 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  checked={gender === 'HOMBRE'}
+                  onChange={() => onGenderChange(gender === 'HOMBRE' ? 'ALL' : 'HOMBRE')}
+                  className="brand-checkbox"
+                />
+                <span className={`text-xs ${gender === 'HOMBRE' ? 'font-bold text-black' : 'text-neutral-700 font-medium'} group-hover:text-black`}>
+                  Hombre ({counts.hombre} diseños)
+                </span>
+              </label>
+
+              <label className="flex items-center gap-3 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  checked={gender === 'MUJER'}
+                  onChange={() => onGenderChange(gender === 'MUJER' ? 'ALL' : 'MUJER')}
+                  className="brand-checkbox"
+                />
+                <span className={`text-xs ${gender === 'MUJER' ? 'font-bold text-black' : 'text-neutral-700 font-medium'} group-hover:text-black`}>
+                  Mujer ({counts.mujer} diseños)
+                </span>
+              </label>
+            </div>
+          )}
+        </div>
+
+        {/* 5. ORDENAR POR */}
         <div className="py-4">
           <button
             onClick={() => toggleSection('sort')}
             className="w-full flex items-center justify-between font-bold text-xs tracking-wider uppercase mb-3 hover:text-neutral-600"
           >
-            <span>Sort By</span>
+            <span>Ordenar</span>
             {openSections.sort ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
 
           {openSections.sort && (
             <div className="space-y-3 pt-1">
               {[
-                { id: 'relevancy', label: 'Relevancy' },
-                { id: 'newest', label: 'Newest' },
-                { id: 'price_low', label: 'Price: Low to High' },
-                { id: 'price_high', label: 'Price: High to Low' },
+                { id: 'relevancy', label: 'Relevancia' },
+                { id: 'newest', label: 'Más Reciente' },
+                { id: 'price_low', label: 'Precio: Menor a Mayor' },
+                { id: 'price_high', label: 'Precio: Mayor a Menor' },
               ].map((opt) => (
                 <label key={opt.id} className="flex items-center gap-3 cursor-pointer group">
                   <input
@@ -251,7 +289,7 @@ export const GymsharkSidebar: React.FC<GymsharkSidebarProps> = ({
                     name="sortBy"
                     checked={sortBy === opt.id}
                     onChange={() => onSortByChange(opt.id)}
-                    className="gymshark-radio"
+                    className="brand-radio"
                   />
                   <span className={`text-xs ${sortBy === opt.id ? 'font-bold text-black' : 'text-neutral-700 font-medium'} group-hover:text-black`}>
                     {opt.label}
@@ -262,25 +300,25 @@ export const GymsharkSidebar: React.FC<GymsharkSidebarProps> = ({
           )}
         </div>
 
-        {/* 5. FIT & FABRIC */}
+        {/* 6. FIT & FABRIC */}
         <div className="py-4">
           <button
             onClick={() => toggleSection('fit')}
             className="w-full flex items-center justify-between font-bold text-xs tracking-wider uppercase mb-3 hover:text-neutral-600"
           >
-            <span>Fit & Fabric</span>
+            <span>Ajuste & Tejido</span>
             {openSections.fit ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
 
           {openSections.fit && (
             <div className="space-y-3 pt-1">
-              {['Pro Compression', '4-Way Stretch', 'Flatlock Anti-Chafe'].map((f) => (
+              {['Pro Compression', '4-Way Stretch', 'Costuras Flatlock'].map((f) => (
                 <label key={f} className="flex items-center gap-3 cursor-pointer group">
                   <input
                     type="checkbox"
                     checked={selectedFit === f}
                     onChange={() => onFitChange(selectedFit === f ? 'ALL' : f)}
-                    className="gymshark-checkbox"
+                    className="brand-checkbox"
                   />
                   <span className="text-xs text-neutral-700 font-medium group-hover:text-black">
                     {f}
@@ -291,21 +329,21 @@ export const GymsharkSidebar: React.FC<GymsharkSidebarProps> = ({
           )}
         </div>
 
-        {/* 6. ACTIVITY */}
+        {/* 7. DISCIPLINA MARCIAL */}
         <div className="py-4">
           <button
             onClick={() => toggleSection('activity')}
             className="w-full flex items-center justify-between font-bold text-xs tracking-wider uppercase mb-3 hover:text-neutral-600"
           >
-            <span>Activity</span>
+            <span>Disciplina</span>
             {openSections.activity ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
 
           {openSections.activity && (
             <div className="space-y-3 pt-1">
-              {['Brazilian Jiu-Jitsu (No-Gi)', 'Grappling & Submission', 'MMA / Combat Conditioning'].map((act) => (
+              {['Brazilian Jiu-Jitsu (No-Gi)', 'Grappling & Submission', 'MMA / Acondicionamiento'].map((act) => (
                 <label key={act} className="flex items-center gap-3 cursor-pointer group">
-                  <input type="checkbox" className="gymshark-checkbox" />
+                  <input type="checkbox" className="brand-checkbox" />
                   <span className="text-xs text-neutral-700 font-medium group-hover:text-black">
                     {act}
                   </span>

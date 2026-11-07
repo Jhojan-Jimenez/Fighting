@@ -1,12 +1,12 @@
 import React from 'react';
 
-interface GymsharkBannerProps {
+interface CollectionBannerProps {
   gender: string;
   selectedElement: string;
   selectedModel: string;
 }
 
-export const GymsharkBanner: React.FC<GymsharkBannerProps> = ({
+export const CollectionBanner: React.FC<CollectionBannerProps> = ({
   gender,
   selectedElement,
   selectedModel,

@@ -13,7 +13,7 @@ export interface ElementProduct {
   colorways: MockupItem[]; // All color variants of this element
 }
 
-interface GymsharkCardProps {
+interface ProductCardProps {
   product: ElementProduct;
   globalColorway: string;
   onOpenModal: (item: MockupItem) => void;
@@ -108,7 +108,10 @@ export const getColorwaySwatch = (modelCode: string) => {
   }
 };
 
-export const GymsharkCard: React.FC<GymsharkCardProps> = ({
+export const AVAILABLE_SIZES = ['S', 'M', 'L', 'XL', '2XL'] as const;
+export type ProductSize = (typeof AVAILABLE_SIZES)[number];
+
+export const ProductCard: React.FC<ProductCardProps> = ({
   product,
   globalColorway,
   onOpenModal,
@@ -168,7 +171,7 @@ export const GymsharkCard: React.FC<GymsharkCardProps> = ({
           className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
         />
 
-        {/* Quick View Button on Hover (Desktop) / Indicator on Mobile */}
+        {/* Quick View Button on Hover */}
         <div
           className={`absolute inset-x-3 sm:inset-x-4 bottom-3 sm:bottom-6 transition-all duration-300 ${
             isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
@@ -182,13 +185,13 @@ export const GymsharkCard: React.FC<GymsharkCardProps> = ({
             className="w-full py-2 sm:py-2.5 bg-black text-white font-bold text-[11px] sm:text-xs uppercase tracking-wider rounded shadow-xl hover:bg-neutral-800 transition-all flex items-center justify-center gap-2"
           >
             <Maximize2 className="w-3.5 h-3.5" />
-            <span>Ver en Pantalla Completa & Zoom</span>
+            <span>Ver Detalles & Tallas</span>
           </button>
         </div>
       </div>
 
-      {/* 2. Colorways Swatches Row (Change the color of this Element) */}
-      <div className="flex items-center gap-2 sm:gap-2 mt-3 mb-1 flex-wrap">
+      {/* 2. Colorways Swatches Row */}
+      <div className="flex items-center gap-2 mt-3 mb-1 flex-wrap">
         <span className="text-[10px] uppercase font-bold text-neutral-400 tracking-wider mr-0.5">
           Colores ({product.colorways.length}):
         </span>
@@ -246,10 +249,15 @@ export const GymsharkCard: React.FC<GymsharkCardProps> = ({
           </span>
         </div>
 
-        {/* Martial quote snippet */}
-        <p className="text-[11px] text-neutral-400 italic truncate pt-0.5">
-          "{product.quote.split('·')[1]?.trim() || product.quote}"
-        </p>
+        {/* Available Sizes Strip */}
+        <div className="flex items-center justify-between text-[11px] pt-1">
+          <span className="text-neutral-400">
+            Tallas: <span className="font-medium text-neutral-700">S · M · L · XL · 2XL</span>
+          </span>
+          <span className="text-[10px] font-mono text-neutral-400 italic">
+            Ajuste Pro
+          </span>
+        </div>
       </div>
     </div>
   );

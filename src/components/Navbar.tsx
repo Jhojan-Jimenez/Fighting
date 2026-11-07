@@ -1,7 +1,7 @@
 import React from 'react';
 import { Search, Heart, Shield } from 'lucide-react';
 
-interface GymsharkHeaderProps {
+interface NavbarProps {
   gender: string;
   onGenderChange: (g: string) => void;
   selectedElement: string;
@@ -17,11 +17,9 @@ interface GymsharkHeaderProps {
   };
 }
 
-export const GymsharkHeader: React.FC<GymsharkHeaderProps> = ({
+export const Navbar: React.FC<NavbarProps> = ({
   gender,
   onGenderChange,
-  selectedElement,
-  onElementChange,
   searchQuery,
   onSearchChange,
   wishlistCount,
@@ -29,7 +27,7 @@ export const GymsharkHeader: React.FC<GymsharkHeaderProps> = ({
 }) => {
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-neutral-200">
-      {/* Top micro announcement bar */}
+      {/* Top announcement bar */}
       <div className="bg-black text-white text-[10px] sm:text-[11px] font-semibold tracking-wider text-center py-1.5 sm:py-2 px-3 uppercase font-sans truncate">
         COLECCIÓN OFICIAL DE COMBATE · CORTE PRO COMPRESSION · EDICIÓN 2026
       </div>
@@ -121,7 +119,7 @@ export const GymsharkHeader: React.FC<GymsharkHeaderProps> = ({
         </div>
       </div>
 
-      {/* Mobile Horizontal Quick Navigation Strip (Todos, Hombre, Mujer) */}
+      {/* Mobile Horizontal Quick Navigation Strip */}
       <div className="flex md:hidden items-center gap-1.5 px-3 py-2 overflow-x-auto border-t border-neutral-100 no-scrollbar bg-neutral-50/70">
         <button
           onClick={() => onGenderChange('ALL')}
